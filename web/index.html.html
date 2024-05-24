@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<style>
+#word1, #word2, #word3 {
+  width: 100px;
+  height: 50px;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #aaaaaa;
+  display: inline-block; 
+}
+
+img {
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+  border: 1px solid #aaaaaa;
+}
+
+#score {
+  font-size: 20px;
+  margin-top: 20px;
+}
+</style>
+<script>
+let score = 0; // 初始化分數為0
+
+function allowDrop(ev) {
+  ev.preventDefault(); 
+}
+
+
+function drag(ev) {
+  ev.dataTransfer.setData("text", ev.target.id); 
+}
+
+function drop(ev, word) {
+  ev.preventDefault(); 
+  const data = ev.dataTransfer.getData("text"); 
+  const img = document.getElementById(data); 
+
+  if (data === word) { 
+    ev.target.appendChild(img); 
+    score++; 
+  } else {
+    score--; 
+  }
+
+  document.getElementById("score").innerText = "Score: " + score; 
+
+  // 檢查是否所有單字區域都有圖片
+  if (document.getElementById("word1").children.length > 0 &&
+      document.getElementById("word2").children.length > 0 &&
+      document.getElementById("word3").children.length > 0) {
+
+        if (score === 3) {
+      alert("恭喜過關！\n最終總分：" + score);
+    } else {
+
+      alert("未完全正確，最終總分：" + score);
+    }
+  }
+}
+</script>
+</head>
+<body>
+
+<p>將正確的圖片拖曳到正確的單字位置上：</p>
+
+<div id="word1" ondrop="drop(event, 'apple')" ondragover="allowDrop(event)">Apple</div>
+<div id="word2" ondrop="drop(event, 'orange')" ondragover="allowDrop(event)">Orange</div>
+<div id="word3" ondrop="drop(event, 'banana')" ondragover="allowDrop(event)">Banana</div>
+
+<br>
+
+<img id="apple" src="apple.png" draggable="true" ondragstart="drag(event)">
+<img id="orange" src="orange.png" draggable="true" ondragstart="drag(event)">
+<img id="banana" src="banana.png" draggable="true" ondragstart="drag(event)">
+
+<p id="score">Score: 0</p>
+
+</body>
+</html>
